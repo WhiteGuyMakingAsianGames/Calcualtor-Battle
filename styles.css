@@ -15,6 +15,10 @@ body {
     text-align: center;
 }
 
+#controls h1, #controls p, #controls button {
+    font-family: 'Press Start 2P', cursive;
+}
+
 #calculator {
     display: inline-block;
     margin-bottom: 20px;
