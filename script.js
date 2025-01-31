@@ -1,96 +1,47 @@
-document.addEventListener('DOMContentLoaded', () => {
-    const display = document.getElementById('display');
-    const buttonsContainer = document.getElementById('buttons');
-    const enemyHealthEl = document.getElementById('enemyHealth');
-    const saveGameButton = document.getElementById('saveGame');
-    let enemyHealth = 100;
-    let unlockedButtons = ['7', '8', '9', '+'];
-    let expression = '';
-    let currentBossIndex = 0;
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f0f0f0;
+    margin: 0;
+}
 
-    const bosses = [
-        { name: '2 Boss', health: 100, unlock: ['4', '5', '6', '-'] },
-        { name: '+- Boss', health: 150, unlock: ['1', '2', '3', '*'] },
-        { name: 'Times Boss', health: 200, unlock: ['0', '.', '/', '='] },
-        { name: 'Multiply Boss', health: 250, unlock: ['C'] },
-        { name: 'Equals Boss', health: 300, unlock: [] }
-    ];
+#controls, #game {
+    text-align: center;
+}
 
-    function updateDisplay(value) {
-        display.textContent = value;
-    }
+#calculator {
+    display: inline-block;
+    margin-bottom: 20px;
+}
 
-    function updateEnemyHealth(damage) {
-        enemyHealth -= damage;
-        enemyHealthEl.textContent = enemyHealth;
-    }
+#display {
+    width: 200px;
+    height: 50px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    margin-bottom: 10px;
+    text-align: right;
+    padding: 10px;
+    font-size: 24px;
+}
 
-    function saveGame() {
-        const saveData = {
-            enemyHealth: enemyHealth,
-            unlockedButtons: unlockedButtons,
-            currentBossIndex: currentBossIndex
-        };
-        alert('Save Code: ' + btoa(JSON.stringify(saveData)));
-    }
+#buttons {
+    display: grid;
+    grid-template-columns: repeat(4, 50px);
+    gap: 5px;
+}
 
-    function loadGame(saveCode) {
-        const saveData = JSON.parse(atob(saveCode));
-        enemyHealth = saveData.enemyHealth;
-        unlockedButtons = saveData.unlockedButtons;
-        currentBossIndex = saveData.currentBossIndex;
-        enemyHealthEl.textContent = enemyHealth;
-        renderButtons();
-    }
+button {
+    width: 50px;
+    height: 50px;
+    font-size: 18px;
+    cursor: pointer;
+}
 
-    function renderButtons() {
-        buttonsContainer.innerHTML = '';
-        unlockedButtons.forEach(button => {
-            const btn = document.createElement('button');
-            btn.textContent = button;
-            btn.addEventListener('click', () => onButtonClick(button));
-            buttonsContainer.appendChild(btn);
-        });
-    }
-
-    function unlockNextButtons() {
-        const nextButtons = bosses[currentBossIndex].unlock;
-        unlockedButtons = [...new Set([...unlockedButtons, ...nextButtons])];
-        renderButtons();
-    }
-
-    function onButtonClick(button) {
-        if (button === '=') {
-            try {
-                const result = eval(expression);
-                updateDisplay(result);
-                updateEnemyHealth(result);
-                if (enemyHealth <= 0) {
-                    alert(`You defeated ${bosses[currentBossIndex].name}!`);
-                    currentBossIndex++;
-                    if (currentBossIndex < bosses.length) {
-                        enemyHealth = bosses[currentBossIndex].health;
-                        unlockNextButtons();
-                    } else {
-                        alert('You defeated all the bosses!');
-                    }
-                    enemyHealthEl.textContent = enemyHealth;
-                }
-                expression = '';
-            } catch {
-                updateDisplay('Error');
-                expression = '';
-            }
-        } else if (button === 'C') {
-            expression = '';
-            updateDisplay('');
-        } else {
-            expression += button;
-            updateDisplay(expression);
-        }
-    }
-
-    saveGameButton.addEventListener('click', saveGame);
-
-    renderButtons();
-});
+#enemy {
+    margin-top: 20px;
+    font-size: 18px;
+}
