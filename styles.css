@@ -8,7 +8,7 @@ body {
     margin: 0;
 }
 
-#game {
+#controls, #game {
     text-align: center;
 }
 
