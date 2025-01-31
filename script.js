@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const display = document.getElementById('display');
     const buttonsContainer = document.getElementById('buttons');
     const enemyHealthEl = document.getElementById('enemyHealth');
+    const bossImage = document.getElementById('bossImage');
     const saveGameButton = document.getElementById('saveGame');
     const startGameButton = document.getElementById('startGame');
     let enemyHealth = 100;
@@ -10,11 +11,11 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentBossIndex = 0;
 
     const bosses = [
-        { name: '2 Boss', health: 100, unlock: ['4', '5', '6', '-'] },
-        { name: '+- Boss', health: 150, unlock: ['1', '2', '3', '*'] },
-        { name: 'Times Boss', health: 200, unlock: ['0', '.', '/', '='] },
-        { name: 'Multiply Boss', health: 250, unlock: ['C'] },
-        { name: 'Equals Boss', health: 300, unlock: [] }
+        { name: '2 Boss', image: 'boss2.png', health: 100, unlock: ['4', '5', '6', '-'] },
+        { name: '+- Boss', image: 'bossPlusMinus.png', health: 150, unlock: ['1', '2', '3', '*'] },
+        { name: 'Times Boss', image: 'bossTimes.png', health: 200, unlock: ['0', '.', '/', '='] },
+        { name: 'Multiply Boss', image: 'bossMultiply.png', health: 250, unlock: ['C'] },
+        { name: 'Equals Boss', image: 'bossEquals.png', health: 300, unlock: [] }
     ];
 
     function updateDisplay(value) {
@@ -42,6 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
         currentBossIndex = saveData.currentBossIndex;
         enemyHealthEl.textContent = enemyHealth;
         renderButtons();
+        updateBoss();
     }
 
     function renderButtons() {
@@ -58,6 +60,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const nextButtons = bosses[currentBossIndex].unlock;
         unlockedButtons = [...new Set([...unlockedButtons, ...nextButtons])];
         renderButtons();
+    }
+
+    function updateBoss() {
+        const boss = bosses[currentBossIndex];
+        bossImage.src = boss.image;
+        enemyHealth = boss.health;
+        enemyHealthEl.textContent = enemyHealth;
     }
 
     function onButtonClick(button) {
@@ -78,12 +87,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     alert(`You defeated ${bosses[currentBossIndex].name}!`);
                     currentBossIndex++;
                     if (currentBossIndex < bosses.length) {
-                        enemyHealth = bosses[currentBossIndex].health;
+                        updateBoss();
                         unlockNextButtons();
                     } else {
                         alert('You defeated all the bosses!');
                     }
-                    enemyHealthEl.textContent = enemyHealth;
                 }
                 expression = '';
             } catch {
@@ -105,6 +113,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('controls').style.display = 'none';
         document.getElementById('game').style.display = 'block';
         renderButtons();
+        updateBoss();
     });
 
     saveGameButton.addEventListener('click', saveGame);
