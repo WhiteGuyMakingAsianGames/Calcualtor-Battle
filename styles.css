@@ -45,3 +45,16 @@ button {
     margin-top: 20px;
     font-size: 18px;
 }
+
+#bossImage {
+    width: 100px;
+    height: 100px;
+    display: block;
+    margin: 0 auto 10px;
+    animation: moveBoss 1s infinite alternate;
+}
+
+@keyframes moveBoss {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(10px); }
+}
